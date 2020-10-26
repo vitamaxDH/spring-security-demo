@@ -11,9 +11,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
+    // 구글로부터 받은 userRequest 데이터에 대한 후처리되는 함수
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("useRequest -> {}", userRequest);
+        log.info("getClientRegistration -> {}", userRequest.getClientRegistration());
+        log.info("getAccessToken -> {}", userRequest.getAccessToken().getTokenValue());
+        log.info("loadUser -> {}", super.loadUser(userRequest).getAttributes());
+
+        // 회원가입을 강제로 진행해볼 예정
         return super.loadUser(userRequest);
     }
 }

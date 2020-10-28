@@ -15,9 +15,13 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("getClientRegistration -> {}", userRequest.getClientRegistration());
+        log.info("getClientRegistration -> {}", userRequest.getClientRegistration()); // registrationId로 어떤 OAuth로 로그인 했는지
         log.info("getAccessToken -> {}", userRequest.getAccessToken().getTokenValue());
+        // 구글 로그인 버튼 클릭 -> 구글 로그인창 -> 로그인을 완료 -> code를 리턴 -> AccessToken 요청
+        // userRequest 정보 -> loadUser 함수 호출 -> 구글로부터 회원프로필을 받아준다.
         log.info("loadUser -> {}", super.loadUser(userRequest).getAttributes());
+
+        OAuth2User oAuth2User = super.loadUser(userRequest);
 
         // 회원가입을 강제로 진행해볼 예정
         return super.loadUser(userRequest);

@@ -28,8 +28,9 @@ public class IndexController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/test/login")
-    public @ResponseBody String testLogin(Authentication authentication,
-                            @AuthenticationPrincipal PrincipalDetails userDetails){ // DI (의존성 주입)
+    public @ResponseBody
+    String testLogin(Authentication authentication,
+                     @AuthenticationPrincipal PrincipalDetails userDetails) { // DI (의존성 주입)
         log.info("/test/login =========================================================");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         log.info("authentication : {}", principalDetails.getUser());
@@ -39,8 +40,9 @@ public class IndexController {
     }
 
     @GetMapping("/test/oauth/login")
-    public @ResponseBody String testOAuthLogin(Authentication authentication,
-                                           @AuthenticationPrincipal OAuth2User oauth){ // DI (의존성 주입)
+    public @ResponseBody
+    String testOAuthLogin(Authentication authentication,
+                          @AuthenticationPrincipal OAuth2User oauth) { // DI (의존성 주입)
         log.info("/test/login =========================================================");
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         log.info("authentication : {}", oAuth2User.getAttributes());
@@ -50,32 +52,40 @@ public class IndexController {
     }
 
     @GetMapping({"", "/"})
-    public String index(){
+    public String index() {
         return "index";
     }
 
     @GetMapping("/user")
-    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails){
+    public @ResponseBody
+    String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("principalDetails : " + principalDetails.getUser());
         return "user";
     }
+
     @GetMapping("/admin")
-    public @ResponseBody String admin(){
+    public @ResponseBody
+    String admin() {
         return "admin";
     }
+
     @GetMapping("/manager")
-    public @ResponseBody String manager(){
+    public @ResponseBody
+    String manager() {
         return "manager";
     }
+
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "loginForm";
     }
+
     @GetMapping("/loginForm")
-    public String loginForm(){
+    public String loginForm() {
         return "loginForm";
     }
-        @PostMapping("/join")
+
+    @PostMapping("/join")
     public String join(User user) {
         log.info("user -> {}", user);
         user.setRole("ROLE_USER");
@@ -85,6 +95,7 @@ public class IndexController {
         userRepository.save(user);
         return "redirect:/loginForm";
     }
+
     @GetMapping("/joinForm")
     public String joinForm() {
         return "joinForm";
@@ -92,13 +103,15 @@ public class IndexController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/info")
-    public @ResponseBody String info(){
+    public @ResponseBody
+    String info() {
         return "개인정보";
     }
 
     @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/data")
-    public @ResponseBody String data(){
+    public @ResponseBody
+    String data() {
         return "데이터정보";
     }
 }

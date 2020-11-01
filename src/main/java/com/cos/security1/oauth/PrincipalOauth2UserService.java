@@ -2,6 +2,9 @@ package com.cos.security1.oauth;
 
 import com.cos.security1.auth.PrincipalDetails;
 import com.cos.security1.model.User;
+import com.cos.security1.oauth.provider.FacebookUserInfo;
+import com.cos.security1.oauth.provider.GoogleUserInfo;
+import com.cos.security1.oauth.provider.OAuth2UserInfo;
 import com.cos.security1.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +39,31 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         OAuth2User oauth2User = super.loadUser(userRequest);
         log.info("getAttributes -> {}", oauth2User.getAttributes());
 
-        String provider = userRequest.getClientRegistration().getClientId();
-        String providerId = oauth2User.getAttribute("sub");
+        OAuth2UserInfo oAuth2UserInfo = null;
+        String clientName = userRequest.getClientRegistration().getClientName();
+
+        if ("Google".equalsIgnoreCase(clientName)) {
+            log.info("Google 로그인 요칭");
+            oAuth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
+        } else if ("Facebook".equalsIgnoreCase(clientName)){
+            log.info("Facebook 로그인 요청");
+            oAuth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
+        } else {
+            log.info("We only support Google & Facebook");
+        }
+
+        String provider = oAuth2UserInfo.getProvider();
+        String providerId = oAuth2UserInfo.getProviderId();
         String username = provider + "_" + providerId;
         String password = bCryptPasswordEncoder.encode("겟인데어");
-        String email = oauth2User.getAttribute("email");
+        String email = oAuth2UserInfo.getEmail();
         String role = "ROLE_USER";
 
         User userEntity = userRepository.findByUsername(username);
 
-        if (userEntity == null){
-            log.info("구글 로그인이 최초입니다.");
+
+        if (userEntity == null) {
+            log.info("{} 로그인이 최초입니다.", clientName);
 
             userEntity = User.builder()
                     .username(username)
@@ -57,6 +74,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .providerId(providerId)
                     .build();
             userRepository.save(userEntity);
+        } else {
+            log.info("이미 {} 로그인한 기록이 있습니다.", clientName);
         }
 
         // 회원가입을 강제로 진행해볼 예정

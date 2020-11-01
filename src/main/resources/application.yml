@@ -33,6 +33,12 @@ spring:
             client-id: 469772698360-q3dm61jhc4d4p9nac5eat1q92kc3omn5.apps.googleusercontent.com
             client-secret: LnXSFIk1RYri7zwxEP8YjDHC
             scope:
-            - email
-            - profile
+              - email
+              - profile
+          facebook:
+            client-id: 395062168334030
+            client-secret: d7c206596be74ddac161c8b568a2337b
+            scope:
+              - email
+              - public_profile
 

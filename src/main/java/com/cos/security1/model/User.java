@@ -1,5 +1,6 @@
 package com.cos.security1.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +32,5 @@ public class User {
     @CreationTimestamp
     private Timestamp createDate;
 
-    public User(String username, String password, String email, String role, String provider, String providerId, Timestamp createDate) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.provider = provider;
-        this.providerId = providerId;
-        this.createDate = createDate;
-    }
+
 }

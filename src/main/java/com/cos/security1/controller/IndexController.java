@@ -60,7 +60,7 @@ public class IndexController {
     public @ResponseBody
     String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("principalDetails : " + principalDetails.getUser());
-        return "user";
+        return principalDetails.toString();
     }
 
     @GetMapping("/admin")

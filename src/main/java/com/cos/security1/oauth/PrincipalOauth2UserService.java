@@ -4,6 +4,7 @@ import com.cos.security1.auth.PrincipalDetails;
 import com.cos.security1.model.User;
 import com.cos.security1.oauth.provider.FacebookUserInfo;
 import com.cos.security1.oauth.provider.GoogleUserInfo;
+import com.cos.security1.oauth.provider.NaverUserInfo;
 import com.cos.security1.oauth.provider.OAuth2UserInfo;
 import com.cos.security1.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -48,8 +51,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         } else if ("Facebook".equalsIgnoreCase(clientName)){
             log.info("Facebook 로그인 요청");
             oAuth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
+        } else if ("Naver".equalsIgnoreCase(clientName)){
+            log.info("Naver 로그인 요청");
+            oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) oauth2User.getAttributes().get("response"));
         } else {
-            log.info("We only support Google & Facebook");
+            log.info("We only support Google & Facebook & Naver");
         }
 
         String provider = oAuth2UserInfo.getProvider();

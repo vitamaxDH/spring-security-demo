@@ -41,4 +41,15 @@ spring:
             scope:
               - email
               - public_profile
+          naver:
+            client-id: 395062168334030
+            client-secret: d7c206596be74ddac161c8b568a2337b
+            scope:
+              - name
+              - email
+            client-name: Naver
+            authorization-grant-type: authorization_code
+            redirect_uri: http://localhost:8080/login/oauth2/code/naver
+            # redirect_uri는 Google, Facebook과 같이 프로바이더인 경우 기본적으로 붙어서 오기 때문에
+            # 명시해줄 필요가 없지만 Naver 등 국가만의 포털 사이트에서는 redirect_uri 를 명시해주어야 한다.
 
